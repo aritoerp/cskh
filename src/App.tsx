@@ -81,7 +81,7 @@ function App() {
           />
         </div>
         
-        <div className={`${isUserInfoVisible ? 'w-2/4' : 'w-3/4'} flex flex-col`}>
+        <div className={`${isUserInfoVisible ? 'w-2/4' : 'w-3/4'} transition-all duration-300`}>
           <ConversationPanel 
             customer={selectedCustomer}
             messages={selectedMessages}
@@ -89,18 +89,13 @@ function App() {
             onEndConversation={handleEndConversation}
             onAcceptSupport={handleAcceptSupport}
             currentStaff={currentStaff}
+            onToggleUserInfo={toggleUserInfo}
+            isUserInfoVisible={isUserInfoVisible}
           />
         </div>
         
-        <div className={`${isUserInfoVisible ? 'w-1/4' : 'w-0'} flex flex-col relative transition-all duration-300`}>
-          <button
-            onClick={toggleUserInfo}
-            className="absolute -left-10 top-6 p-2 bg-white border border-gray-200 rounded-l-lg shadow-sm hover:bg-gray-50 transition-colors duration-200"
-            aria-label={isUserInfoVisible ? 'Ẩn thông tin' : 'Hiện thông tin'}
-          >
-            {isUserInfoVisible ? <PanelRightClose size={20} /> : <PanelRightOpen size={20} />}
-          </button>
-          <div className={`h-full overflow-hidden ${isUserInfoVisible ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300`}>
+        <div className={`${isUserInfoVisible ? 'w-1/4' : 'w-0'} transition-all duration-300 overflow-hidden`}>
+          <div className={`h-full ${isUserInfoVisible ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300`}>
             <UserInfo userInfo={selectedUserInfo} />
           </div>
         </div>

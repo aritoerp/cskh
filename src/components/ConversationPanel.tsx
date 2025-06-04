@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import { Customer, Staff, Message } from '../types';
 import MessageItem from './MessageItem';
 import Avatar from './Avatar';
-import { Send, Pause, CheckCircle2 } from 'lucide-react';
+import { Send, Pause, CheckCircle2, PanelRightClose, PanelRightOpen } from 'lucide-react';
 
 interface ConversationPanelProps {
   customer: Customer | null;
@@ -11,6 +11,8 @@ interface ConversationPanelProps {
   onEndConversation: () => void;
   onAcceptSupport: () => void;
   currentStaff: Staff;
+  onToggleUserInfo: () => void;
+  isUserInfoVisible: boolean;
 }
 
 const ConversationPanel: React.FC<ConversationPanelProps> = ({ 
@@ -19,7 +21,9 @@ const ConversationPanel: React.FC<ConversationPanelProps> = ({
   onSendMessage,
   onEndConversation,
   onAcceptSupport,
-  currentStaff
+  currentStaff,
+  onToggleUserInfo,
+  isUserInfoVisible
 }) => {
   const [newMessage, setNewMessage] = React.useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -50,7 +54,7 @@ const ConversationPanel: React.FC<ConversationPanelProps> = ({
     );
   }
 
-  const canInteract =  (customer.assignedTo === currentStaff.id);
+  const canInteract = (customer.assignedTo === currentStaff.id);
 
   const showEndConversationButton = customer.active && !customer.needsSupport;
 
@@ -66,23 +70,32 @@ const ConversationPanel: React.FC<ConversationPanelProps> = ({
           />
           <h2 className="text-lg font-semibold text-gray-800">{customer.name}</h2>
         </div>
-        {customer.needsSupport ? (
-          <button 
-            className="px-4 py-2 rounded bg-blue-500 hover:bg-blue-600 flex items-center gap-2 transition-colors duration-200 text-white"
-            onClick={onAcceptSupport}
+        <div className="flex items-center gap-2">
+          <button
+            onClick={onToggleUserInfo}
+            className="p-2 hover:bg-gray-100 rounded-lg transition-colors duration-200"
+            aria-label={isUserInfoVisible ? 'Ẩn thông tin' : 'Hiện thông tin'}
           >
-            <CheckCircle2 size={16} />
-            Xác nhận hỗ trợ
+            {isUserInfoVisible ? <PanelRightClose size={20} /> : <PanelRightOpen size={20} />}
           </button>
-        ) : showEndConversationButton&&(customer.assignedTo === currentStaff.id)&& (
-          <button 
-            className="px-4 py-2 rounded bg-gray-100 hover:bg-gray-200 flex items-center gap-2 transition-colors duration-200 text-gray-700"
-            onClick={onEndConversation}
-          >
-            <Pause size={16} />
-            Kết thúc hội thoại
-          </button>
-        )}
+          {customer.needsSupport ? (
+            <button 
+              className="px-4 py-2 rounded bg-blue-500 hover:bg-blue-600 flex items-center gap-2 transition-colors duration-200 text-white"
+              onClick={onAcceptSupport}
+            >
+              <CheckCircle2 size={16} />
+              Xác nhận hỗ trợ
+            </button>
+          ) : showEndConversationButton && (customer.assignedTo === currentStaff.id) && (
+            <button 
+              className="px-4 py-2 rounded bg-gray-100 hover:bg-gray-200 flex items-center gap-2 transition-colors duration-200 text-gray-700"
+              onClick={onEndConversation}
+            >
+              <Pause size={16} />
+              Kết thúc hội thoại
+            </button>
+          )}
+        </div>
       </div>
       
       <div className="flex-1 overflow-y-auto p-4 bg-white">
