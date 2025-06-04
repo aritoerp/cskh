@@ -4,11 +4,13 @@ import ConversationPanel from './components/ConversationPanel';
 import UserInfo from './components/UserInfo';
 import { customers, messages, userInfos, staff } from './data/mockData';
 import { Customer, Message } from './types';
+import { PanelRightClose, PanelRightOpen } from 'lucide-react';
 
 function App() {
   const [selectedCustomerId, setSelectedCustomerId] = useState<string>(customers[1].id);
   const [customerData, setCustomerData] = useState(customers);
   const [messageData, setMessageData] = useState(messages);
+  const [isUserInfoVisible, setIsUserInfoVisible] = useState(true);
   
   // For demo purposes, we'll use the first staff member
   const currentStaff = staff[0];
@@ -63,6 +65,10 @@ function App() {
     );
   };
 
+  const toggleUserInfo = () => {
+    setIsUserInfoVisible(prev => !prev);
+  };
+
   return (
     <div className="h-screen flex flex-col bg-white">
       <div className="flex-1 flex overflow-hidden">
@@ -75,7 +81,7 @@ function App() {
           />
         </div>
         
-        <div className="w-2/4">
+        <div className={`${isUserInfoVisible ? 'w-2/4' : 'w-3/4'} flex flex-col`}>
           <ConversationPanel 
             customer={selectedCustomer}
             messages={selectedMessages}
@@ -86,8 +92,17 @@ function App() {
           />
         </div>
         
-        <div className="w-1/4">
-          <UserInfo userInfo={selectedUserInfo} />
+        <div className={`${isUserInfoVisible ? 'w-1/4' : 'w-0'} flex flex-col relative transition-all duration-300`}>
+          <button
+            onClick={toggleUserInfo}
+            className="absolute -left-10 top-6 p-2 bg-white border border-gray-200 rounded-l-lg shadow-sm hover:bg-gray-50 transition-colors duration-200"
+            aria-label={isUserInfoVisible ? 'Ẩn thông tin' : 'Hiện thông tin'}
+          >
+            {isUserInfoVisible ? <PanelRightClose size={20} /> : <PanelRightOpen size={20} />}
+          </button>
+          <div className={`h-full overflow-hidden ${isUserInfoVisible ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300`}>
+            <UserInfo userInfo={selectedUserInfo} />
+          </div>
         </div>
       </div>
     </div>
