@@ -71,13 +71,6 @@ const ConversationPanel: React.FC<ConversationPanelProps> = ({
           <h2 className="text-lg font-semibold text-gray-800">{customer.name}</h2>
         </div>
         <div className="flex items-center gap-2">
-          <button
-            onClick={onToggleUserInfo}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors duration-200"
-            aria-label={isUserInfoVisible ? 'Ẩn thông tin' : 'Hiện thông tin'}
-          >
-            {isUserInfoVisible ? <PanelRightClose size={20} /> : <PanelRightOpen size={20} />}
-          </button>
           {customer.needsSupport ? (
             <button 
               className="px-4 py-2 rounded bg-blue-500 hover:bg-blue-600 flex items-center gap-2 transition-colors duration-200 text-white"
@@ -95,6 +88,14 @@ const ConversationPanel: React.FC<ConversationPanelProps> = ({
               Kết thúc hội thoại
             </button>
           )}
+          <div className="w-px h-6 bg-gray-200 mx-2" />
+          <button
+            onClick={onToggleUserInfo}
+            className="p-2 hover:bg-gray-100 rounded-lg transition-colors duration-200"
+            aria-label={isUserInfoVisible ? 'Ẩn thông tin' : 'Hiện thông tin'}
+          >
+            {isUserInfoVisible ? <PanelRightClose size={20} /> : <PanelRightOpen size={20} />}
+          </button>
         </div>
       </div>
       
